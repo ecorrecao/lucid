@@ -42,6 +42,6 @@ $commands = [
 ];
 
 $app = new Symfony\Component\Console\Application('Lucid', '2.0.0');
-array_walk($commands, [$app, 'add']);
+$app->addCommands($commands);
 
 $app->run();

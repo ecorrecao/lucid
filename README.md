@@ -3,12 +3,14 @@
 <p align="center" style="margin-left: -20px">
     <a href="https://docs.lucidarch.site"><img src="http://img.shields.io/badge/read_the-docs-blue" alt="Documentation"></a>
     <a href="https://discord.gg/j5xBhTa7"><img src="https://img.shields.io/discord/1041986899939700787?label=Discord&logo=discord" alt="Discord"/></a>
-    <a href="https://github.com/lucidarch/lucid/actions?query=workflow%3Atests"><img src="https://img.shields.io/github/actions/workflow/status/lucidarch/lucid/tests" alt="Build Status"></a>
+    <a href="https://github.com/ecorrecao/lucid/actions?query=workflow%3Atests"><img src="https://img.shields.io/github/actions/workflow/status/ecorrecao/lucid/tests" alt="Build Status"></a>
     <a href="https://packagist.org/packages/lucidarch/lucid"><img src="https://img.shields.io/packagist/v/lucidarch/lucid?label=composer&logo=composer" alt="Latest Stable Version"></a>
     <a href="https://github.com/lucidarch/lucid/blob/main/LICENSE"><img src="https://img.shields.io/packagist/l/lucidarch/lucid" alt="License"></a>
 </p>
 
 ---
+
+This is the [ecorrecao](https://github.com/ecorrecao) fork of [`lucidarch/lucid`](https://github.com/lucidarch/lucid) v2.0.1, with Laravel 13 and Symfony 8 support. The Composer package name stays `lucidarch/lucid`.
 
 - Install: https://docs.lucidarch.site/installation
 - Website: https://lucidarch.site

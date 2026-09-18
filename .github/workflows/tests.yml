@@ -14,12 +14,30 @@ jobs:
       matrix:
         php: [8.1, 8.2, 8.3, 8.4]
         stability: [prefer-lowest, prefer-stable]
-        laravel: [9.x, 10.x, 11.x, 12.x]
+        laravel: [9.x, 10.x, 11.x, 12.x, 13.x]
         exclude:
           - laravel: 11.x
             php: 8.1
           - laravel: 12.x
             php: 8.1
+          # Laravel 13 requires PHP ^8.3
+          - laravel: 13.x
+            php: 8.1
+          - laravel: 13.x
+            php: 8.2
+        include:
+          # Laravel 13 accepts symfony/console ^7.4 || ^8.0, and symfony/console 8
+          # requires PHP >= 8.4.1. So PHP 8.3 can only resolve Symfony 7, and PHP 8.4
+          # resolves Symfony 8. Both paths must work; these cells pin that contract so
+          # a future resolution change cannot silently drop one of them.
+          - laravel: 13.x
+            php: 8.3
+            stability: prefer-stable
+            symfony_major: 7
+          - laravel: 13.x
+            php: 8.4
+            stability: prefer-stable
+            symfony_major: 8
 
     name: L${{ matrix.laravel }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}
 
@@ -39,11 +57,25 @@ jobs:
           composer config -g audit.block-insecure false
           composer create-project --prefer-dist laravel/laravel=${{ matrix.laravel }} laravel-${{ matrix.laravel }} --no-interaction --no-audit
 
+      # Deliberately no -W. If Lucid's Symfony constraint is ever too narrow for the
+      # host's resolved version, this must fail loudly. With -W, Composer would
+      # instead silently downgrade the host application's Symfony - which is the
+      # exact bug this change fixes.
       - name: Require Lucid
         run: |
           cd laravel-${{ matrix.laravel }}
           composer config repositories.lucid '{"type": "path", "url": "$GITHUB_WORKSPACE", "options": {"symlink": true}}'
           composer require lucidarch/lucid:@dev --no-audit
+
+      - name: Assert resolved Symfony major
+        if: matrix.symfony_major
+        run: |
+          cd laravel-${{ matrix.laravel }}
+          MAJOR=$(composer show --format=json symfony/console \
+            | php -r '$v = json_decode(stream_get_contents(STDIN), true)["versions"][0]; echo explode(".", ltrim($v, "v"))[0];')
+          echo "resolved symfony/console major: $MAJOR (expected ${{ matrix.symfony_major }})"
+          [ "$MAJOR" = "${{ matrix.symfony_major }}" ] \
+            || { echo "::error::expected Symfony ${{ matrix.symfony_major }}, resolved $MAJOR"; exit 1; }
 
       - name: Run Tests
         run: |

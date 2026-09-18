@@ -6,7 +6,7 @@ The `lucidarch/lucid` Composer package — the actual library that implements th
 
 **Current version:** 2.0.0 (in progress — see upgrade plan)
 **Packagist name:** `lucidarch/lucid`
-**PHP:** ^8.1 | **Laravel:** 9.x, 10.x, 11.x, 12.x
+**PHP:** ^8.1 | **Laravel:** 9.x, 10.x, 11.x, 12.x, 13.x
 
 ---
 
@@ -84,7 +84,7 @@ There are no PHPUnit tests in the package source itself — tests are integratio
 **`bin/test-local.sh`** — run this for local development. Requires a sibling `../Testbench/` directory.
 
 ```sh
-# Test all versions (9.x 10.x 11.x 12.x)
+# Test all versions (9.x 10.x 11.x 12.x 13.x)
 ./bin/test-local.sh
 
 # Test a single version
@@ -115,8 +115,12 @@ FRESH=1 ./bin/test-local.sh 11.x
 
 ### CI (GitHub Actions)
 
-Matrix: PHP 8.1/8.2/8.3/8.4 × Laravel 9.x/10.x/11.x/12.x × prefer-lowest/prefer-stable.
-Exclusions: Laravel 11+ requires PHP 8.2+; Laravel 12+ requires PHP 8.2+.
+Matrix: PHP 8.1/8.2/8.3/8.4 × Laravel 9.x/10.x/11.x/12.x/13.x × prefer-lowest/prefer-stable.
+Exclusions: Laravel 11+ requires PHP 8.2+; Laravel 12+ requires PHP 8.2+; Laravel 13 requires PHP 8.3+.
+
+Two `include:` cells pin the Symfony major on Laravel 13 — PHP 8.3 → 7, PHP 8.4 → 8, `prefer-stable`
+only — asserted by the "Assert resolved Symfony major" step. `symfony/console` 8 requires PHP >= 8.4.1,
+which is what makes that split deterministic.
 
 ---
 
@@ -185,7 +189,7 @@ Critical items already addressed (verify before assuming done):
 - `src/Units/Model.php` — explicit `Illuminate\Database\Eloquent\Model` import
 - `src/Bus/UnitDispatcher.php` — explicit `Illuminate\Support\Facades\App` import
 - `bin/test-commands.sh` — Laravel 11 path conditionals
-- `.github/workflows/tests.yml` — updated matrix (PHP 8.1–8.4, Laravel 9–12)
+- `.github/workflows/tests.yml` — updated matrix (PHP 8.1–8.4, Laravel 9–13)
 
 ---
 

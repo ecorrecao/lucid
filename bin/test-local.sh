@@ -6,7 +6,7 @@
 # runs bin/test-commands.sh inside the Laravel install.
 #
 # Usage:
-#   ./bin/test-local.sh            # test all versions: 9.x 10.x 11.x
+#   ./bin/test-local.sh            # test all versions: 9.x 10.x 11.x 12.x 13.x
 #   ./bin/test-local.sh 11.x       # test a single version
 #   ./bin/test-local.sh 9.x 10.x   # test specific versions
 #   FRESH=1 ./bin/test-local.sh    # wipe and recreate installs before testing
@@ -27,7 +27,7 @@ fi
 if [[ $# -gt 0 ]]; then
     VERSIONS=($@)
 else
-    VERSIONS=(9.x 10.x 11.x 12.x)
+    VERSIONS=(9.x 10.x 11.x 12.x 13.x)
 fi
 
 # Safe removal: only removes a direct laravel-* child of TESTBENCH_DIR
